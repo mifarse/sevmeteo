@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+    <head>       
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
+        <title>Sevmeteo</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<link rel="stylesheet" href="http://demos.jquerymobile.com/1.4.0/theme-classic/theme-classic.css" />
+
+		<script type="text/javascript">
+			function nowdata(){
+				$.getJSON("http://sevmeteo.esy.es/core.php?method=now&callback=?",function(data){
+					$("#NowTemperature").html(data.temperature);
+					$("#NowPressure").html(data.pressure);
+					$("#NowHumidity").html(data.humidity);
+					$("#NowWind").html(data.wind);
+					$("#updating").html(data.lastUpdate);
+
+					$("#connecterror").slideUp();
+				}).fail(function(){
+					$("#connecterror").slideDown();
+				});
+			}
+			$(document).ready(function(){
+				nowdata();
+				setInterval(nowdata,30000);
+			});
+		</script>
+    </head>
+	<body>		
+		<div data-role="page" id="main_page" data-theme="b">
+			<div data-role="header">
+				<h1>Погода сейчас</h1>
+			</div>
+			<div data-role="content" >
+				<div class="ui-corner-all ui-shadow" id="connecterror" style="display:none; padding: 5px; background-color: #fee">Ошибка соединения! Проверьте наличие интернет-соединения.</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+						<p>Температура: </p>
+						<p>Давление: </p>
+						<p>Влажность: </p>
+						<p>Скорость ветра: </p>
+					</div>
+					<div class="ui-block-b">
+						<p id="NowTemperature"><img src="loading.gif"></p>
+						<p id="NowPressure"><img src="loading.gif"></p>
+						<p id="NowHumidity"><img src="loading.gif"></p>
+						<p id="NowWind"><img src="loading.gif"></p>
+					</div>
+				</div>
+				<small >Данные берутся с сайта <a href="http://sevmeteo.info">sevmeteo.info</a>. Обновление данных происходит автоматически. Последнее обновление на sevmeteo: <span id="updating"></span></small>
+			</div>
+			<div data-role="footer">
+				<div style="text-align:center">Разработка: Серафим Уруков</div>
+			</div>
+		</div>
+
+	</body>
+</html>
